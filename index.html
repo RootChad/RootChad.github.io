@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Irchad Thong Sang · Game Developer</title>
+<meta name="description" content="Irchad « Chad » Thong Sang — Gameplay & Tools Programmer (Unreal Engine, C++, C#). Kalanoro, game jams et projets indé.">
+<meta property="og:title" content="Irchad Thong Sang · Game Developer">
+<meta property="og:image" content="assets/kalanoro/ss4.jpg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Silkscreen&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0a14; --bg2:#15101f; --card:#1b1528; --line:#2c2340;
+  --ink:#f6f1ea; --mute:#a99fba; --dim:#6f6585;
+  --sun:#ff7a3d; --pink:#ff4f9a; --lime:#c3f25c; --teal:#3fd8c8; --gold:#ffcf4a;
+  --grad:linear-gradient(100deg,var(--sun),var(--pink) 55%,#b565ff);
+  --r:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;font-size:17px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(1180px,100% - 40px);margin-inline:auto}
+h1,h2,h3{font-family:'Bricolage Grotesque',sans-serif;line-height:1.02;letter-spacing:-.02em}
+.px{font-family:'Silkscreen',monospace;letter-spacing:.04em;text-transform:uppercase}
+::selection{background:var(--pink);color:#fff}
+
+/* grain */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.06;
+  background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+nav.solid{background:rgba(13,10,20,.82);backdrop-filter:blur(14px);border-color:var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{font-family:'Silkscreen';font-size:18px;display:flex;align-items:center;gap:10px}
+.logo i{width:12px;height:12px;background:var(--lime);box-shadow:4px 4px 0 var(--pink);display:inline-block}
+.links{display:flex;gap:28px;align-items:center;font-size:15px;color:var(--mute)}
+.links a:hover{color:var(--ink)}
+.lang{display:flex;border:1px solid var(--line);border-radius:99px;padding:3px;font-family:'Silkscreen';font-size:12px}
+.lang button{background:none;border:0;color:var(--mute);padding:4px 10px;border-radius:99px;cursor:pointer;font:inherit}
+.lang button.on{background:var(--ink);color:var(--bg)}
+@media(max-width:760px){.links a{display:none}}
+
+/* HERO */
+.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;padding:120px 0 70px;overflow:hidden;isolation:isolate}
+.slides{position:absolute;inset:0;z-index:-2}
+.slides img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.08);transition:opacity 1.6s ease,transform 7s linear}
+.slides img.on{opacity:1;transform:scale(1)}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(13,10,20,.55) 0%,rgba(13,10,20,.25) 35%,rgba(13,10,20,.85) 72%,var(--bg) 100%),
+             linear-gradient(90deg,rgba(13,10,20,.85) 0%,rgba(13,10,20,0) 65%)}
+.tag{display:inline-flex;align-items:center;gap:10px;font-size:12px;padding:7px 14px;border-radius:99px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(8px)}
+.tag b{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 var(--lime);animation:ping 2s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 10px rgba(195,242,92,0)}100%{box-shadow:0 0 0 0 rgba(195,242,92,0)}}
+.hero h1{font-size:clamp(44px,6.6vw,96px);font-weight:800;margin:22px 0 18px;max-width:15ch}
+.hero h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:clamp(17px,1.6vw,21px);color:#e4dcef;max-width:56ch}
+.hero .who{margin-top:10px;color:var(--mute);font-size:15px}
+.cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 24px;border-radius:14px;font-weight:700;font-size:16px;transition:transform .2s,box-shadow .2s,background .2s;cursor:pointer;border:0;font-family:inherit}
+.btn.main{background:var(--lime);color:#10150a;box-shadow:5px 5px 0 var(--pink)}
+.btn.main:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--pink)}
+.btn.ghost{background:rgba(255,255,255,.08);color:var(--ink);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(8px)}
+.btn.ghost:hover{background:rgba(255,255,255,.16)}
+.stats{display:grid;grid-template-columns:repeat(4,auto);gap:10px 44px;margin-top:56px;justify-content:start}
+.stat strong{display:block;font-family:'Bricolage Grotesque';font-size:clamp(30px,3.4vw,44px);font-weight:800;line-height:1}
+.stat span{font-size:13px;color:var(--mute)}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,auto)}}
+.scroll{position:absolute;right:28px;bottom:36px;font-size:11px;color:var(--mute);writing-mode:vertical-rl;display:flex;gap:10px;align-items:center}
+.scroll::after{content:"";width:1px;height:60px;background:linear-gradient(var(--mute),transparent);animation:drop 2s infinite}
+@keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@media(max-width:760px){.scroll{display:none}}
+
+/* MARQUEE */
+.marquee{border-block:1px solid var(--line);background:var(--bg2);overflow:hidden;padding:18px 0}
+.track{display:flex;gap:44px;width:max-content;animation:slide 38s linear infinite;font-family:'Bricolage Grotesque';font-weight:700;font-size:22px;color:var(--mute);white-space:nowrap}
+.track span{display:flex;align-items:center;gap:44px}
+.track span::after{content:"✦";color:var(--pink);font-size:14px}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* SECTIONS */
+section{padding:120px 0}
+.eyebrow{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--lime);margin-bottom:18px}
+.eyebrow::before{content:"";width:28px;height:2px;background:currentColor}
+h2{font-size:clamp(38px,5.4vw,72px);font-weight:800;margin-bottom:22px}
+.sub{color:var(--mute);max-width:60ch;font-size:18px}
+
+/* KALANORO */
+#kalanoro{position:relative;overflow:hidden;isolation:isolate}
+#kalanoro .bgimg{position:absolute;inset:-40px;z-index:-2;background:url(assets/kalanoro/bg.jpg) center/cover;filter:blur(40px) saturate(1.4);opacity:.35}
+#kalanoro::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,var(--bg),rgba(13,10,20,.6) 30%,rgba(13,10,20,.6) 70%,var(--bg))}
+.feat{display:grid;grid-template-columns:1.25fr 1fr;gap:56px;align-items:center}
+@media(max-width:940px){.feat{grid-template-columns:1fr}}
+.shot-main{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:16/9;box-shadow:0 30px 80px -20px rgba(255,79,154,.35),0 0 0 1px rgba(255,255,255,.08);cursor:zoom-in}
+.shot-main img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.shot-main:hover img{transform:scale(1.03)}
+.badge-date{position:absolute;top:16px;left:16px;background:var(--gold);color:#241900;font-family:'Silkscreen';font-size:12px;padding:8px 12px;border-radius:8px;box-shadow:3px 3px 0 #000}
+.thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.thumbs button{border:0;padding:0;border-radius:10px;overflow:hidden;cursor:pointer;aspect-ratio:16/9;opacity:.55;transition:opacity .2s,outline-color .2s;outline:2px solid transparent;outline-offset:2px;background:#000}
+.thumbs button:hover{opacity:.9}
+.thumbs button.on{opacity:1;outline-color:var(--lime)}
+.thumbs img{width:100%;height:100%;object-fit:cover}
+.feat h2{font-size:clamp(52px,7vw,96px);margin-bottom:10px}
+.feat h2 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.studio{color:var(--mute);font-size:15px;margin-bottom:20px}
+.studio b{color:var(--ink)}
+.partners{display:flex;align-items:center;flex-wrap:wrap;gap:14px 26px;margin:-4px 0 22px}
+.partners img{width:auto}
+.partners img+img{padding-left:26px;border-left:1px solid var(--line)}
+.partners .nt{height:36px;margin:0 -6px}.partners .sega{height:30px}.partners .idx{height:58px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 26px}
+.chip{font-size:13px;padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#ddd4ea}
+.chip.plat{border-color:rgba(63,216,200,.45);color:var(--teal)}
+.role{background:rgba(27,21,40,.75);border:1px solid var(--line);border-radius:var(--r);padding:26px;backdrop-filter:blur(10px);margin-top:10px}
+.role h3{font-size:14px;font-family:'Silkscreen';font-weight:400;color:var(--gold);margin-bottom:16px}
+.role li{list-style:none;display:grid;grid-template-columns:32px 1fr;gap:10px;padding:10px 0;border-top:1px dashed var(--line);font-size:15.5px;color:#ddd4ea}
+.role li:first-of-type{border-top:0;padding-top:0}
+.role li i{font-style:normal;font-size:20px;line-height:1.3}
+.role li b{color:var(--ink)}
+
+/* GAMES */
+.head-row{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:44px}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filters button{font:inherit;font-size:14px;padding:8px 16px;border-radius:99px;border:1px solid var(--line);background:none;color:var(--mute);cursor:pointer;transition:.2s}
+.filters button:hover{color:var(--ink);border-color:var(--dim)}
+.filters button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
+@media(max-width:600px){.grid{grid-template-columns:1fr 1fr;gap:12px}.game h3{font-size:16px}.game .meta{padding:10px 12px 12px}.game .row span:last-child{display:none}.game .ov{display:none}.team{font-size:10px;top:6px;right:6px}}
+.game{position:relative;background:var(--card);border-radius:var(--r);overflow:hidden;border:1px solid var(--line);transition:transform .25s cubic-bezier(.2,.8,.3,1.3),box-shadow .25s,border-color .25s;display:flex;flex-direction:column}
+.game:hover{transform:translateY(-6px) rotate(-.6deg);box-shadow:8px 8px 0 var(--c,var(--pink));border-color:var(--c,var(--pink))}
+.game .im{aspect-ratio:315/250;overflow:hidden;position:relative;background:#000}
+.game .im img{width:100%;height:100%;object-fit:cover;transition:transform .5s;image-rendering:auto}
+.game:hover .im img{transform:scale(1.06)}
+.game .ov{position:absolute;inset:0;background:linear-gradient(0deg,rgba(13,10,20,.95),rgba(13,10,20,.55));padding:18px;display:flex;align-items:flex-end;font-size:14px;line-height:1.5;color:#eee;opacity:0;transition:opacity .3s}
+.game:hover .ov,.game:focus-visible .ov{opacity:1}
+.game .meta{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.game h3{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.game .row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto;font-size:12.5px;color:var(--mute)}
+.genre{font-family:'Silkscreen';font-size:11px;color:var(--c,var(--pink))}
+.team{position:absolute;top:10px;right:10px;font-size:11px;padding:4px 9px;border-radius:99px;background:rgba(13,10,20,.8);border:1px solid rgba(255,255,255,.18);z-index:2}
+.game.hide{display:none}
+.more{margin-top:40px;text-align:center}
+
+/* XP */
+#xp{background:var(--bg2);border-block:1px solid var(--line)}
+.xp-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:70px}
+@media(max-width:900px){.xp-grid{grid-template-columns:1fr;gap:30px}}
+.xp-side{position:sticky;top:110px;align-self:start}
+@media(max-width:900px){.xp-side{position:static}}
+.timeline{position:relative;padding-left:34px}
+.timeline::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--lime),var(--pink),var(--line))}
+.job{position:relative;padding-bottom:44px}
+.job:last-child{padding-bottom:0}
+.job::before{content:"";position:absolute;left:-34px;top:6px;width:16px;height:16px;background:var(--bg2);border:3px solid var(--c,var(--lime));transform:rotate(45deg)}
+.job .when{font-family:'Silkscreen';font-size:12px;color:var(--c,var(--lime))}
+.job h3{font-size:clamp(22px,2.4vw,28px);margin:6px 0 4px}
+.job .at{color:var(--mute);font-size:15px;margin-bottom:12px}
+.job .at b{color:var(--ink)}
+.job p{color:#d8cfe6;font-size:15.5px;margin-bottom:10px}
+.job .chips{margin:12px 0 0}
+.edu{margin-top:50px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:600px){.edu{grid-template-columns:1fr}}
+.edu div{border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--card)}
+.edu small{font-family:'Silkscreen';font-size:11px;color:var(--teal)}
+.edu b{display:block;font-size:17px;margin:4px 0 2px}
+.edu span{color:var(--mute);font-size:14px}
+
+/* SKILLS */
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(330px,100%),1fr));gap:18px;margin-top:50px}
+.sk{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;position:relative;overflow:hidden;transition:border-color .3s}
+.sk:hover{border-color:var(--c)}
+.sk::after{content:"";position:absolute;width:160px;height:160px;border-radius:50%;background:var(--c);filter:blur(70px);opacity:.14;right:-50px;top:-60px}
+.sk .ic{font-size:30px;margin-bottom:14px}
+.sk h3{font-size:22px;margin-bottom:12px}
+.sk ul{list-style:none;display:flex;flex-wrap:wrap;gap:7px}
+.sk li{font-size:13.5px;padding:5px 11px;border-radius:8px;background:rgba(255,255,255,.05);color:#ddd4ea}
+
+/* CONTACT */
+#contact{text-align:center;position:relative;overflow:hidden}
+#contact h2{font-size:clamp(48px,9vw,130px);max-width:12ch;margin:0 auto 26px}
+#contact h2 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+#contact .sub{margin:0 auto}
+#contact .cta{justify-content:center}
+.socials{display:flex;justify-content:center;gap:12px;margin-top:26px;flex-wrap:wrap}
+.socials a{display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;border:1px solid var(--line);color:var(--mute);font-size:15px;transition:.2s}
+.socials a:hover{color:var(--ink);border-color:var(--dim);background:rgba(255,255,255,.04)}
+.sprites{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.sprites i{position:absolute;width:14px;height:14px;background:var(--c);box-shadow:5px 5px 0 rgba(0,0,0,.4);animation:float 6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-22px) rotate(45deg)}}
+footer{border-top:1px solid var(--line);padding:28px 0;color:var(--dim);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+/* LIGHTBOX */
+.lb{position:fixed;inset:0;z-index:200;background:rgba(5,3,10,.94);display:none;align-items:center;justify-content:center;padding:30px}
+.lb.open{display:flex}
+.lb img{max-height:88vh;border-radius:12px;box-shadow:0 20px 80px rgba(0,0,0,.6)}
+.lb button{position:absolute;background:rgba(255,255,255,.1);border:0;color:#fff;width:52px;height:52px;border-radius:50%;font-size:22px;cursor:pointer}
+.lb button:hover{background:rgba(255,255,255,.22)}
+.lb .x{top:20px;right:20px}.lb .p{left:20px}.lb .n{right:20px}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(34px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="wrap">
+    <a href="#top" class="logo"><i></i>CHAD</a>
+    <div class="links">
+      <a href="#kalanoro">Kalanoro</a>
+      <a href="#games" data-i18n="nav_games"></a>
+      <a href="#xp" data-i18n="nav_xp"></a>
+      <a href="#contact">Contact</a>
+      <div class="lang" role="group" aria-label="Language">
+        <button data-l="fr">FR</button><button data-l="en">EN</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="slides" aria-hidden="true">
+    <img src="assets/kalanoro/ss4.jpg" alt="" class="on">
+    <img src="assets/kalanoro/ss7.jpg" alt="">
+    <img src="assets/kalanoro/ss2.jpg" alt="">
+    <img src="assets/kalanoro/ss3.jpg" alt="">
+  </div>
+  <div class="wrap">
+    <span class="tag px"><b></b><span data-i18n="hero_tag"></span></span>
+    <h1 data-i18n="hero_title"></h1>
+    <p class="lead" data-i18n="hero_lead"></p>
+    <p class="who">Irchad « Chad » Thong Sang</p>
+    <div class="cta">
+      <a class="btn main" href="#kalanoro"><span data-i18n="cta_k"></span> →</a>
+      <a class="btn ghost" href="#games" data-i18n="cta_g"></a>
+    </div>
+    <div class="stats">
+      <div class="stat"><strong>1</strong><span data-i18n="st1"></span></div>
+      <div class="stat"><strong>4</strong><span data-i18n="st2"></span></div>
+      <div class="stat"><strong>15</strong><span data-i18n="st3"></span></div>
+      <div class="stat"><strong>5+</strong><span data-i18n="st4"></span></div>
+    </div>
+  </div>
+  <div class="scroll px">scroll</div>
+</header>
+
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    <span>Unreal Engine 5</span><span>C++</span><span>C# / .NET</span><span>Gameplay Systems</span><span>PS5</span><span>Xbox</span><span>Nintendo Switch</span><span>Tools</span><span>UMG / Slate</span><span>Jenkins CI/CD</span><span>Unity</span><span>Game Jams</span>
+    <span>Unreal Engine 5</span><span>C++</span><span>C# / .NET</span><span>Gameplay Systems</span><span>PS5</span><span>Xbox</span><span>Nintendo Switch</span><span>Tools</span><span>UMG / Slate</span><span>Jenkins CI/CD</span><span>Unity</span><span>Game Jams</span>
+  </div>
+</div>
+
+<!-- KALANORO -->
+<section id="kalanoro">
+  <div class="bgimg"></div>
+  <div class="wrap feat">
+    <div class="rv">
+      <div class="shot-main" id="mainShot">
+        <img src="assets/kalanoro/ss4.jpg" alt="Kalanoro screenshot" id="mainImg">
+        <span class="badge-date" data-i18n="date"></span>
+      </div>
+      <div class="thumbs" id="thumbs"></div>
+    </div>
+    <div class="rv">
+      <div class="eyebrow px" data-i18n="feat_eyebrow"></div>
+      <h2><span>Kalanoro</span></h2>
+      <p class="studio"><b>Red Raketa Studio</b> · <span data-i18n="publisher"></span> <b>New Tales</b> &amp; <b>SEGA</b><br><b>ID@XBOX</b> Developer Acceleration Program</p>
+      <div class="partners">
+        <img src="assets/logos/newtales-color.png" alt="New Tales" class="nt">
+        <img src="assets/logos/sega.svg" alt="SEGA" class="sega">
+        <img src="assets/logos/idxbox-color.png" alt="ID@Xbox" class="idx">
+      </div>
+      <p class="sub" data-i18n="k_desc"></p>
+      <div class="chips">
+        <span class="chip plat">PC · Steam</span><span class="chip plat">PS5</span><span class="chip plat">Xbox</span><span class="chip plat">Switch</span>
+        <span class="chip" data-i18n="t1"></span><span class="chip" data-i18n="t2"></span><span class="chip" data-i18n="t3"></span>
+      </div>
+      <div class="role">
+        <h3 data-i18n="myrole"></h3>
+        <ul>
+          <li><i>⚙️</i><span data-i18n="r1"></span></li>
+          <li><i>🛠️</i><span data-i18n="r2"></span></li>
+          <li><i>🎛️</i><span data-i18n="r3"></span></li>
+          <li><i>🚀</i><span data-i18n="r4"></span></li>
+        </ul>
+      </div>
+      <div class="cta">
+        <a class="btn main" href="https://store.steampowered.com/app/3158820/Kalanoro/" target="_blank" rel="noopener"><span data-i18n="wish"></span> ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GAMES -->
+<section id="games">
+  <div class="wrap">
+    <div class="head-row rv">
+      <div>
+        <div class="eyebrow px" data-i18n="g_eyebrow"></div>
+        <h2 data-i18n="g_title"></h2>
+        <p class="sub" data-i18n="g_sub"></p>
+      </div>
+      <div class="filters" id="filters"></div>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="more rv"><a class="btn ghost" href="https://sangchad.itch.io/" target="_blank" rel="noopener"><span data-i18n="itch"></span> ↗</a></div>
+  </div>
+</section>
+
+<!-- XP -->
+<section id="xp">
+  <div class="wrap xp-grid">
+    <div class="xp-side rv">
+      <div class="eyebrow px" data-i18n="xp_eyebrow"></div>
+      <h2 data-i18n="xp_title"></h2>
+      <p class="sub" data-i18n="xp_sub"></p>
+      <div class="cta">
+        <a class="btn ghost" href="assets/Irchad_THONGSANG_CV_FR.pdf" target="_blank">CV FR ↓</a>
+        <a class="btn ghost" href="assets/Irchad_THONGSANG_CV_EN.pdf" target="_blank">CV EN ↓</a>
+      </div>
+    </div>
+    <div>
+      <div class="timeline">
+        <div class="job rv" style="--c:var(--lime)">
+          <div class="when" data-i18n="j1_when"></div>
+          <h3 data-i18n="j1_title"></h3>
+          <div class="at"><b>Red Raketa</b> · Antananarivo</div>
+          <p data-i18n="j1_p"></p>
+          <div class="chips"><span class="chip">Unreal Engine</span><span class="chip">C++</span><span class="chip">C# / .NET</span><span class="chip">UMG / Slate</span><span class="chip">Jenkins</span><span class="chip">Perforce</span></div>
+        </div>
+        <div class="job rv" style="--c:var(--pink)">
+          <div class="when">09/2023 — 01/2025</div>
+          <h3 data-i18n="j2_title"></h3>
+          <div class="at"><b>Kainoo</b> · Antananarivo</div>
+          <p data-i18n="j2_p"></p>
+          <div class="chips"><span class="chip">C# / .NET Core</span><span class="chip">3D</span><span class="chip">CAD</span><span class="chip">Node.js</span><span class="chip">Angular</span><span class="chip">SQL</span></div>
+        </div>
+        <div class="job rv" style="--c:var(--teal)">
+          <div class="when">02/2021 — 05/2021</div>
+          <h3 data-i18n="j3_title"></h3>
+          <div class="at"><b>AGETIPA</b> · Antananarivo</div>
+          <p data-i18n="j3_p"></p>
+          <div class="chips"><span class="chip">Python</span><span class="chip">OpenCV</span><span class="chip">YOLO</span><span class="chip">Java / Android</span></div>
+        </div>
+      </div>
+      <div class="edu rv">
+        <div><small>2020 — 2021</small><b>Master 2 MBDS</b><span>Université Côte d'Azur · Nice</span></div>
+        <div><small>2020</small><b>Master 1</b><span>IT University</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="wrap">
+    <div class="rv">
+      <div class="eyebrow px" data-i18n="sk_eyebrow"></div>
+      <h2 data-i18n="sk_title"></h2>
+    </div>
+    <div class="skills">
+      <div class="sk rv" style="--c:var(--lime)"><div class="ic">🎮</div><h3>Gameplay</h3><ul><li>Unreal Engine</li><li>C++</li><li>Unity</li><li>C#</li><li data-i18n="s_obs"></li><li data-i18n="s_quest"></li></ul></div>
+      <div class="sk rv" style="--c:var(--pink)"><div class="ic">🛠️</div><h3>Tools &amp; Pipeline</h3><ul><li>C# / .NET</li><li>Unreal API</li><li data-i18n="s_loc"></li><li>Python</li><li>Qt</li><li>Shell</li></ul></div>
+      <div class="sk rv" style="--c:var(--teal)"><div class="ic">🕹️</div><h3 data-i18n="s_console"></h3><ul><li>PS5</li><li>Xbox</li><li>Nintendo Switch</li><li data-i18n="s_mem"></li><li>Profiling CPU/GPU</li></ul></div>
+      <div class="sk rv" style="--c:var(--gold)"><div class="ic">🚀</div><h3>DevOps</h3><ul><li>Jenkins CI/CD</li><li>Docker</li><li>Git</li><li>Perforce</li></ul></div>
+      <div class="sk rv" style="--c:#b565ff"><div class="ic">🧠</div><h3 data-i18n="s_ai"></h3><ul><li>YOLO</li><li>OpenCV</li><li data-i18n="s_cad"></li><li data-i18n="s_pc"></li></ul></div>
+      <div class="sk rv" style="--c:var(--sun)"><div class="ic">🧩</div><h3>Web &amp; Architecture</h3><ul><li>ASP.NET Core</li><li>REST API</li><li>Angular</li><li>Node.js</li><li>TypeScript</li><li>SQL</li><li>SOLID</li><li>Agile</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="sprites" id="sprites"></div>
+  <div class="wrap rv">
+    <div class="eyebrow px" style="justify-content:center" data-i18n="c_eyebrow"></div>
+    <h2 data-i18n="c_title"></h2>
+    <p class="sub" data-i18n="c_sub"></p>
+    <div class="cta">
+      <a class="btn main" href="mailto:thongsangchad@gmail.com">✉ thongsangchad@gmail.com</a>
+    </div>
+    <div class="socials">
+      <a href="https://sangchad.itch.io/" target="_blank" rel="noopener">🎲 itch.io</a>
+      <a href="https://store.steampowered.com/app/3158820/Kalanoro/" target="_blank" rel="noopener">🎮 Steam · Kalanoro</a>
+      <a href="assets/Irchad_THONGSANG_CV_FR.pdf" target="_blank">📄 CV FR</a>
+      <a href="assets/Irchad_THONGSANG_CV_EN.pdf" target="_blank">📄 CV EN</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Irchad Thong Sang</span>
+    <span data-i18n="foot"></span>
+  </div>
+</footer>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Screenshot">
+  <button class="x" aria-label="Close">✕</button>
+  <button class="p" aria-label="Previous">←</button>
+  <img id="lbImg" alt="Kalanoro screenshot">
+  <button class="n" aria-label="Next">→</button>
+</div>
+
+<script>
+const T = {
+fr:{
+  nav_games:"Jeux", nav_xp:"Parcours",
+  hero_tag:"Kalanoro · sortie le 24.09.2026",
+  hero_title:"Je crée des <em>jeux</em> et des <em>logiciels</em>.",
+  hero_lead:"Software &amp; Game Developer — C# / .NET, Unreal Engine et Unity. Du gameplay aux outils, jusqu’au portage console multiplateforme.",
+  cta_k:"Découvrir Kalanoro", cta_g:"Mes jeux de game jam",
+  st1:"jeu commercial", st2:"plateformes", st3:"jeux jam & indé", st4:"ans de dev",
+  date:"24 SEPT 2026",
+  feat_eyebrow:"Projet à la une",
+  publisher:"édité par",
+  k_desc:"Action-aventure plateforme 3D inspirée du folklore malgache. Tu formes un groupe de lémuriens musiciens, pars en tournée à travers Lémuria et affrontes la sorcière Raneny, une chanson à la fois.",
+  t1:"Plateforme 3D", t2:"Action-aventure", t3:"Folklore malgache",
+  myrole:"Mon rôle sur le jeu",
+  r1:"<b>Systèmes core (C++ / Blueprints)</b> : quêtes, dialogues et sauvegardes, architecturés autour du pattern Observer pour un code modulaire et performant.",
+  r2:"<b>Tooling C# / .NET</b> : outil d’automatisation de la localisation (flux .po / Excel) qui pilote directement l’API Unreal.",
+  r3:"<b>UI</b> : intégration UMG / Slate et optimisation mémoire critique pour le portage Nintendo Switch.",
+  r4:"<b>Portage & DevOps</b> : déploiement PS5 / Xbox et intégration continue avec Jenkins.",
+  wish:"Ajouter à ma liste Steam",
+  g_eyebrow:"Game jams & projets perso", g_title:"Des jams, des idées, des jeux finis.",
+  g_sub:"Plateformers, rhythm games, puzzles, shooters… 15 petits jeux créés en game jam ou en solo, tous jouables sur itch.io.",
+  all:"Tous", itch:"Tout voir sur itch.io", teamlbl:"en équipe", play:"Jouer",
+  xp_eyebrow:"Parcours", xp_title:"Du code métier au jeu vidéo.",
+  xp_sub:"Développeur logiciel de formation, spécialisé dans le jeu vidéo : je relie une rigueur d’ingénieur (architecture, CI/CD, outils) à l’envie de faire des jeux qui ont du caractère.",
+  j1_when:"04/2024 — aujourd’hui", j1_title:"Développeur Unreal Engine & Tools C#",
+  j1_p:"Programmation gameplay et systèmes sur <b>Kalanoro</b> : mécaniques core en C++, interfaces UMG/Slate, outils de localisation en C# et portage multiplateforme (PS5, Xbox, Switch) avec pipeline Jenkins.",
+  j2_title:"Développeur C#",
+  j2_p:"Applications 3D métier : algorithmes de snapping et configurateur de structures, moteur de découpe d’objets CAO, traitement de nuages de points massifs et visualiseur de véhicules haute fidélité. APIs REST .NET Core / Node.js et front Angular.",
+  j3_title:"Chef de projet junior",
+  j3_p:"Spécifications et estimation de projets IT, application de comptage de véhicules par vision par ordinateur (Python, OpenCV, YOLO), bases MySQL et portage mobile Java/Android.",
+  sk_eyebrow:"Boîte à outils", sk_title:"Ce que j’apporte à une équipe.",
+  s_obs:"Pattern Observer", s_quest:"Quêtes / dialogues / saves", s_loc:"Automatisation localisation",
+  s_console:"Portage console", s_mem:"Optimisation mémoire", s_ai:"IA & 3D", s_cad:"Données CAO", s_pc:"Nuages de points",
+  c_eyebrow:"Contact", c_title:"On fait un jeu <em>ensemble</em> ?",
+  c_sub:"Studio, jam, projet indé ou poste de gameplay / tools programmer : écris-moi, je réponds vite.",
+  foot:"Fait main à Antananarivo, avec beaucoup de café ☕"
+},
+en:{
+  nav_games:"Games", nav_xp:"Experience",
+  hero_tag:"Kalanoro · out 09.24.2026",
+  hero_title:"I build <em>games</em> and <em>software</em>.",
+  hero_lead:"Software &amp; Game Developer — C# / .NET, Unreal Engine and Unity. From gameplay to tools, all the way to multiplatform console porting.",
+  cta_k:"Discover Kalanoro", cta_g:"My game jam games",
+  st1:"commercial release", st2:"platforms", st3:"jam & indie games", st4:"years coding",
+  date:"SEPT 24 2026",
+  feat_eyebrow:"Featured project",
+  publisher:"published by",
+  k_desc:"A 3D action-adventure platformer inspired by Malagasy folklore. Form a band of lemur musicians, tour across Lemuria and take down the witch Raneny, one song at a time.",
+  t1:"3D Platformer", t2:"Action-adventure", t3:"Malagasy folklore",
+  myrole:"My role on the game",
+  r1:"<b>Core systems (C++ / Blueprints)</b>: quests, dialogue and save systems, built around the Observer pattern for modular, high-performance code.",
+  r2:"<b>C# / .NET tooling</b>: a localization automation tool (.po / Excel pipeline) that drives the Unreal API directly.",
+  r3:"<b>UI</b>: UMG / Slate integration and critical memory optimization for the Nintendo Switch port.",
+  r4:"<b>Porting & DevOps</b>: PS5 / Xbox deployment and continuous integration with Jenkins.",
+  wish:"Wishlist on Steam",
+  g_eyebrow:"Game jams & side projects", g_title:"Jams, ideas, finished games.",
+  g_sub:"Platformers, rhythm games, puzzlers, shooters… 15 small games made during game jams or solo, all playable on itch.io.",
+  all:"All", itch:"See everything on itch.io", teamlbl:"team", play:"Play",
+  xp_eyebrow:"Experience", xp_title:"From business software to games.",
+  xp_sub:"A software engineer by training who specialised in games: I bring engineering rigor (architecture, CI/CD, tooling) to games with personality.",
+  j1_when:"04/2024 — present", j1_title:"Unreal Engine & C# Tools Developer",
+  j1_p:"Gameplay and systems programming on <b>Kalanoro</b>: core mechanics in C++, UMG/Slate interfaces, C# localization tooling and multiplatform porting (PS5, Xbox, Switch) with a Jenkins pipeline.",
+  j2_title:"C# Developer",
+  j2_p:"3D business applications: snapping algorithms and a structure configurator, a CAD slicing engine, massive point-cloud processing and a high-fidelity vehicle visualizer. REST APIs in .NET Core / Node.js with an Angular front end.",
+  j3_title:"Junior Project Manager",
+  j3_p:"Specs and estimates for IT projects, a computer-vision vehicle counting app (Python, OpenCV, YOLO), MySQL databases and Java/Android mobile ports.",
+  sk_eyebrow:"Toolbox", sk_title:"What I bring to a team.",
+  s_obs:"Observer pattern", s_quest:"Quests / dialogue / saves", s_loc:"Localization automation",
+  s_console:"Console porting", s_mem:"Memory optimization", s_ai:"AI & 3D", s_cad:"CAD data", s_pc:"Point clouds",
+  c_eyebrow:"Contact", c_title:"Let’s make a game <em>together</em>.",
+  c_sub:"Studio, jam, indie project or a gameplay / tools programmer role: drop me a line, I reply fast.",
+  foot:"Handmade in Antananarivo, fuelled by coffee ☕"
+}};
+
+// id, title, genre key, url, img, platforms, fr, en, team
+const G = [
+ ["dream","Dream","puzzle","https://sangchad.itch.io/dream","dream","Android",
+  "Aventure narrative en pixel art : un mélange de plateforme, RPG et die & retry où un jeune garçon curieux perce les mystères de son monde.",
+  "A pixel-art story-driven adventure mixing platformer, RPG and die & retry, following a curious boy uncovering the mysteries of his world."],
+ ["ambition","Ambition","sim","https://miradoralafi.itch.io/ambition","ambition","Web · Windows",
+  "Jeu de simulation réalisé en équipe.","A simulation game made as part of a team.",1],
+ ["cardoro","CarDoro","racing","https://sangchad.itch.io/cardoro","cardoro","Windows",
+  "Un compagnon Pomodoro : lance le minuteur et admire le voyage en voiture à travers différents paysages.",
+  "A Pomodoro companion: start the timer and enjoy the road trip through different landscapes."],
+ ["mrcoffee","Mr Coffee","rhythm","https://sangchad.itch.io/mr-coffee","mrcoffee","Windows · Android",
+  "Rhythm game : prépare le café parfait pour tes clients en dosant le sucre au bon tempo.",
+  "Rhythm game: brew the perfect coffee for your customers by adding sugar right on the beat."],
+ ["slime","SlimeJourney","puzzle","https://sangchad.itch.io/slimejourney","slime","Windows · Android",
+  "Puzzle game où chaque mouvement compte : résous les niveaux avec un nombre de déplacements limité.",
+  "A puzzle game where every move counts: clear each level with a limited number of moves."],
+ ["pixel","PixelAdventure","platformer","https://sangchad.itch.io/pixeladventure","pixel","Windows · Linux",
+  "Après une éruption volcanique, dash et saute à travers les décombres pour trouver de l’aide.",
+  "After a huge volcanic eruption, dash and jump through the rubble to find help."],
+ ["hasinala","Hasinala, on a journey","adventure","https://zulmianah.itch.io/hasinala-on-a-journey","hasinala","Windows",
+  "Jeu d’aventure créé en équipe pour la Game Jam Plus 2020.","An adventure game made as a team for Game Jam Plus 2020.",1],
+ ["flappy","Flappy Chicken","action","https://sangchad.itch.io/flappy-chicken","flappy","Web · Windows",
+  "Vole pour survivre, ni trop haut ni trop bas, avec bascule de caméra 2D / 3D. Fait avec Unity.",
+  "Fly to survive, not too high, not too low, with a 2D / 3D camera switch. Made with Unity."],
+ ["outer","Outer Reach, A New Beginning","vn","https://miradoralafi.itch.io/outer-reach","outer","Web",
+  "Visual novel de science-fiction réalisé en équipe.","A sci-fi visual novel made as part of a team.",1],
+ ["rewind","Rewind City","action","https://sangchad.itch.io/rewind-city","rewind","Windows",
+  "La ville a été détruite par des aliens : utilise ton pouvoir de rembobinage pour survivre et la restaurer.",
+  "Aliens destroyed the city: use your rewind power to survive and restore it."],
+ ["unknow","Unknow","adventure","https://sangchad.itch.io/unknow","unknow","Windows",
+  "Survis dans un monde inconnu, élimine les monstres et gagne des compétences pour découvrir la vérité.",
+  "Survive in an unknown world, defeat monsters and gain skills to uncover the truth."],
+ ["battleship","BattleShip","shooter","https://sangchad.itch.io/battleship","battleship","Windows",
+  "Ce trésor est à nous : vise, charge et coule les navires de la marine.",
+  "This treasure is ours: aim, charge and sink the navy ships."],
+ ["risky","Risky Zone","adventure","https://sangchad.itch.io/risky-zone","risky","Windows",
+  "Plonge dans le monde caché du dark web et survis jusqu’au bout.",
+  "Dive into the hidden world of the dark web and survive until the end."],
+ ["dust","Dust & Nature","action","https://sangchad.itch.io/dust-nature","dust","Windows",
+  "Coop : avec un ami, repousse les aliens et soigne une Terre ravagée par la pollution.",
+  "Co-op: team up with a friend to fight off aliens and heal a polluted Earth."],
+ ["xmas","Xmas Shoot","shooter","https://sangchad.itch.io/hatman","xmas","Windows",
+  "C’est Noël, c’est la chasse aux lapins : prends le Hat Man et fonce.",
+  "It’s Christmas, so it’s rabbit-hunting season: grab the Hat Man and go."]
+];
+const GENRES = {
+  fr:{platformer:"Plateforme",puzzle:"Puzzle",action:"Action",adventure:"Aventure",shooter:"Shooter",rhythm:"Rythme",racing:"Course",sim:"Simulation",vn:"Visual novel"},
+  en:{platformer:"Platformer",puzzle:"Puzzle",action:"Action",adventure:"Adventure",shooter:"Shooter",rhythm:"Rhythm",racing:"Racing",sim:"Simulation",vn:"Visual novel"}
+};
+const GC = {platformer:"var(--lime)",puzzle:"var(--teal)",action:"var(--sun)",adventure:"var(--gold)",shooter:"var(--pink)",rhythm:"#b565ff",racing:"var(--teal)",sim:"var(--lime)",vn:"#b565ff"};
+const FILTERS = ["all","action","adventure","puzzle","shooter","platformer","rhythm"];
+
+let lang = "fr", filter = "all";
+try { lang = localStorage.getItem("lang") || (navigator.language||"fr").slice(0,2); } catch(e){}
+if(!T[lang]) lang = "en";
+
+function renderGames(){
+  const grid = document.getElementById("grid");
+  grid.innerHTML = G.map(([id,t,g,url,img,plat,fr,en,team])=>`
+    <a class="game rv" href="${url}" target="_blank" rel="noopener" data-g="${g}" style="--c:${GC[g]}">
+      <div class="im">
+        ${team?`<span class="team">👥 ${T[lang].teamlbl}</span>`:""}
+        <img src="assets/games/${img}.png" alt="${t}" loading="lazy">
+        <div class="ov">${lang==="fr"?fr:en}</div>
+      </div>
+      <div class="meta">
+        <h3>${t}</h3>
+        <div class="row"><span class="genre">${GENRES[lang][g]}</span><span>${plat}</span></div>
+      </div>
+    </a>`).join("");
+  document.getElementById("filters").innerHTML = FILTERS.map(f=>
+    `<button data-f="${f}" class="${f===filter?"on":""}">${f==="all"?T[lang].all:GENRES[lang][f]}</button>`).join("");
+  applyFilter(); observe();
+}
+function applyFilter(){
+  document.querySelectorAll(".game").forEach(el=>{
+    const g = el.dataset.g;
+    const match = filter==="all" || g===filter || (filter==="adventure" && g==="vn") || (filter==="puzzle" && g==="sim");
+    el.classList.toggle("hide", !match);
+  });
+}
+document.getElementById("filters").addEventListener("click",e=>{
+  const b = e.target.closest("button"); if(!b) return;
+  filter = b.dataset.f;
+  document.querySelectorAll("#filters button").forEach(x=>x.classList.toggle("on",x===b));
+  applyFilter();
+});
+
+function setLang(l){
+  lang = l; document.documentElement.lang = l;
+  try{ localStorage.setItem("lang",l) }catch(e){}
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ const v=T[l][el.dataset.i18n]; if(v!==undefined) el.innerHTML=v; });
+  document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.l===l));
+  renderGames();
+}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>setLang(b.dataset.l));
+
+// reveal
+const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} }),{threshold:.12});
+function observe(){ document.querySelectorAll(".rv:not(.in)").forEach((el,i)=>{ el.style.transitionDelay = el.classList.contains("game") ? (i%4)*70+"ms" : ""; io.observe(el); }); }
+
+// nav
+const nav = document.getElementById("nav");
+addEventListener("scroll",()=>nav.classList.toggle("solid",scrollY>40),{passive:true});
+
+// hero slideshow
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const sl = [...document.querySelectorAll(".slides img")]; let si = 0;
+if(!reduce) setInterval(()=>{ sl[si].classList.remove("on"); si=(si+1)%sl.length; sl[si].classList.add("on"); },6000);
+
+// kalanoro gallery + lightbox
+const SS = [4,1,2,3,5,6,7,8];
+let cur = 0;
+const thumbs = document.getElementById("thumbs"), mainImg = document.getElementById("mainImg");
+thumbs.innerHTML = SS.map((n,i)=>`<button class="${i?"":"on"}" aria-label="Screenshot ${i+1}"><img src="assets/kalanoro/ss${n}_s.jpg" alt="" loading="lazy"></button>`).join("");
+function show(i){ cur=(i+SS.length)%SS.length; mainImg.src=`assets/kalanoro/ss${SS[cur]}.jpg`;
+  thumbs.querySelectorAll("button").forEach((b,j)=>b.classList.toggle("on",j===cur)); lbImg.src=mainImg.src; }
+thumbs.addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) show([...thumbs.children].indexOf(b)); });
+const lb = document.getElementById("lb"), lbImg = document.getElementById("lbImg");
+document.getElementById("mainShot").onclick=()=>{ lbImg.src=mainImg.src; lb.classList.add("open"); };
+lb.querySelector(".x").onclick=()=>lb.classList.remove("open");
+lb.querySelector(".p").onclick=e=>{e.stopPropagation();show(cur-1)};
+lb.querySelector(".n").onclick=e=>{e.stopPropagation();show(cur+1)};
+lb.onclick=e=>{ if(e.target===lb) lb.classList.remove("open"); };
+addEventListener("keydown",e=>{ if(!lb.classList.contains("open")) return;
+  if(e.key==="Escape") lb.classList.remove("open"); if(e.key==="ArrowLeft") show(cur-1); if(e.key==="ArrowRight") show(cur+1); });
+
+// floating pixels in contact
+const cols=["var(--lime)","var(--pink)","var(--teal)","var(--gold)","var(--sun)"];
+document.getElementById("sprites").innerHTML = Array.from({length:14},(_,i)=>
+  `<i style="--c:${cols[i%5]};left:${(i*71)%100}%;top:${(i*37)%90+5}%;animation-delay:${-(i*.7)}s;opacity:${.25+(i%3)*.2}"></i>`).join("");
+
+setLang(lang);
+</script>
+</body>
+</html>
